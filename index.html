@@ -206,7 +206,7 @@
       box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
       transition: all 0.2s ease;
       position: sticky;
-      bottom: 1rem;
+      bottom: 2rem;
       z-index: 100;
     }
     .checkout-btn:hover {
@@ -345,20 +345,6 @@
       border-radius: 8px;
       margin-bottom: 1rem;
       background: #fff;
-    }
-    .carousel::after {
-      content: "@onlybodys.ar";
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-weight: bold;
-      z-index: 10;
-      pointer-events: none;
     }
     .carousel::before {
       content: "OnlyBodys";
@@ -579,7 +565,7 @@
       <li><a href="#">Los bodys mas HOT </a></li>
     </ul>
   </nav>
-  <div class="breadcrumb">Inicio / Productos</div>
+  <div class="breadcrumb"> </div>
 
   <main class="products" id="product-list"></main>
 
@@ -675,28 +661,28 @@
     let envioSeleccionado = opcionesEnvio[0]; // Por defecto el primer envío
     let numeroOrden = ""; // Se genera al abrir el carrito
     const productos = [
-      { id: 1, nombre: "Body VENUS HILO", precio: 31000, stock: true, imgs: [
+      { id: 1, nombre: "Body VENUS HILO", precio: 18000, stock: true, imgs: [
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-22-42555190f3a6ba14a417515726455329-480-0.webp",
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/122-0e0f6c337ff2cb557c17392811115346-640-0.webp",
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/124-4a33486ea9eb810e7117392811115722-640-0.webp"
       ]},
-      { id: 2, nombre: "Conjunto LUXURY", precio: 35800, stock: true, imgs: [
+      { id: 2, nombre: "Conjunto LUXURY", precio: 20000, stock: true, imgs: [
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-7-1dab04fa4f4c1aa8c017500835199021-480-0.webp",
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-8-fd2b6cac00bc05aaf817500835192035-640-0.webp",
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-9-eba4ea7360ad168aed17500835199307-640-0.webp"
       ]},
-      { id: 3, nombre: "Body Cleo", precio: 36900, stock: false, imgs: [
-        "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-45-17cca741c495f2497217526199298605-640-0.webp",
-        "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-43-22b013424c3ffcdcc517526199300927-1024-1024.webp"
-      ]},
-      { id: 4, nombre: "Body SAVAGE", precio: 39900, stock: true, imgs: [
+      { id: 3, nombre: "Body SAVAGE", precio: 18500, stock: true, imgs: [
         "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3996.jpg?raw=true",
         "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3997.jpg?raw=true"
       ]},
-      { id: 5, nombre: "Body NUDE", precio: 39900, stock: true, imgs: [
-        "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3993.JPG?raw=true",
+      { id: 4, nombre: "Body NUDE", precio: 16000, stock: true, imgs: [
         "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3995.jpg?raw=true",
-        "https://raw.githubusercontent.com/onlybodys/onlybodys/refs/heads/main/ob/fotos/IMG_3994.WEBP"
+        "https://raw.githubusercontent.com/onlybodys/onlybodys/refs/heads/main/ob/fotos/IMG_3994.WEBP",
+        "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3993.JPG?raw=true"
+      ]},
+      { id: 5, nombre: "Body Cleo", precio: 36900, stock: false, imgs: [
+        "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-45-17cca741c495f2497217526199298605-640-0.webp",
+        "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-43-22b013424c3ffcdcc517526199300927-1024-1024.webp"
       ]}
     ];
 
