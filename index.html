@@ -193,15 +193,29 @@
       font-weight: bold;
     }
     .checkout-btn {
-      margin-top: 1rem;
+      margin: 1.5rem 0 1rem 0;
       background: #25D366;
       color: white;
       border: none;
       width: 100%;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 6px;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+      transition: all 0.2s ease;
+      position: sticky;
+      bottom: 1rem;
+      z-index: 100;
+    }
+    .checkout-btn:hover {
+      background: #22c55e;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+    }
+    .checkout-btn:active {
+      transform: translateY(0);
     }
     .shipping-section {
       margin: 1rem 0;
@@ -332,6 +346,35 @@
       margin-bottom: 1rem;
       background: #fff;
     }
+    .carousel::after {
+      content: "@onlybodys.ar";
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .carousel::before {
+      content: "OnlyBodys";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 2rem;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.15);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      z-index: 5;
+      pointer-events: none;
+      white-space: nowrap;
+      user-select: none;
+    }
     .carousel-track {
       display: flex;
       transition: transform 0.35s ease;
@@ -345,6 +388,13 @@
       width: 100%;
       height: auto;
       display: block;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      pointer-events: none;
+      -webkit-touch-callout: none;
+      -webkit-user-drag: none;
     }
     .carousel-btn {
       position: absolute;
@@ -582,6 +632,7 @@
     
     <div class="cart-total" id="cart-shipping">Envío: $2000</div>
     <div class="cart-total" id="cart-grandtotal">Total + Envío: $0</div>
+    
     <button class="checkout-btn" onclick="checkout()">Finalizar Compra</button>
   </div>
 
@@ -629,7 +680,7 @@
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/122-0e0f6c337ff2cb557c17392811115346-640-0.webp",
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/124-4a33486ea9eb810e7117392811115722-640-0.webp"
       ]},
-      { id: 2, nombre: "Conjunto Pink", precio: 35800, stock: true, imgs: [
+      { id: 2, nombre: "Conjunto LUXURY", precio: 35800, stock: true, imgs: [
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-7-1dab04fa4f4c1aa8c017500835199021-480-0.webp",
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-8-fd2b6cac00bc05aaf817500835192035-640-0.webp",
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-9-eba4ea7360ad168aed17500835199307-640-0.webp"
@@ -638,11 +689,14 @@
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-45-17cca741c495f2497217526199298605-640-0.webp",
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-43-22b013424c3ffcdcc517526199300927-1024-1024.webp"
       ]},
-      { id: 4, nombre: "Set Wine Negro", precio: 39900, stock: true, imgs: [
-        "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-43-22b013424c3ffcdcc517526199300927-1024-1024.webp"
+      { id: 4, nombre: "Body SAVAGE", precio: 39900, stock: true, imgs: [
+        "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3996.jpg?raw=true",
+        "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3997.jpg?raw=true"
       ]},
-      { id: 5, nombre: "Set Wine Negro", precio: 39900, stock: true, imgs: [
-        "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-43-22b013424c3ffcdcc517526199300927-1024-1024.webp"
+      { id: 5, nombre: "Body NUDE", precio: 39900, stock: true, imgs: [
+        "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3993.JPG?raw=true",
+        "https://github.com/onlybodys/onlybodys/blob/main/ob/fotos/IMG_3995.jpg?raw=true",
+        "https://raw.githubusercontent.com/onlybodys/onlybodys/refs/heads/main/ob/fotos/IMG_3994.WEBP"
       ]}
     ];
 
@@ -944,7 +998,7 @@
         postal: document.getElementById('customer-postal').value
       };
       
-      let mensaje = `🛍️ *NUEVA ORDEN - ${numeroOrden}*%0A%0A`;
+      let mensaje = `🛍️ *NUEVA ORDEN*%0A📦 *NRO.ORDEN: ${numeroOrden}*%0A%0A`;
       mensaje += `👤 *DATOS DEL CLIENTE:*%0A`;
       mensaje += `Nombre: ${customerData.name}%0A`;
       mensaje += `Email: ${customerData.email}%0A`;
@@ -973,8 +1027,56 @@
       window.open(`https://wa.me/${telefono}?text=${mensaje}`, "_blank");
     }
 
+    // Protección de imágenes
+    function protegerImagenes() {
+      // Deshabilitar click derecho y mostrar advertencia
+      document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG') {
+          alert('🔒 Las imágenes están protegidas');
+        }
+        e.preventDefault();
+        return false;
+      });
+
+      // Deshabilitar arrastrar imágenes
+      document.addEventListener('dragstart', function(e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Deshabilitar selección de texto en imágenes
+      document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Deshabilitar teclas de desarrollador
+      document.addEventListener('keydown', function(e) {
+        // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        if (e.keyCode === 123 || 
+            (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) ||
+            (e.ctrlKey && e.keyCode === 85)) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Evitar guardar imagen con Ctrl+S
+      document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.keyCode === 83) {
+          e.preventDefault();
+          return false;
+        }
+      });
+    }
+
     renderProductos();
     renderCarrito();
+    protegerImagenes();
   </script>
   <section class="info-cards">
     <div class="info-card">
