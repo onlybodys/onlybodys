@@ -32,6 +32,21 @@
       cursor: pointer;
       font-weight: bold;
     }
+    .cart-count {
+      margin-left: 0.5rem;
+      background: #ffffff;
+      color: #111;
+      border-radius: 999px;
+      padding: 0 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .animate-bump { animation: bump 350ms ease; }
+    @keyframes bump {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
     .products {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -53,6 +68,10 @@
     }
     .product h3 { margin-bottom: 0.5rem; }
     .product p { margin-bottom: 1rem; font-weight: bold; }
+    .price { display: flex; align-items: baseline; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .price-old { color: #8b8b8b; text-decoration: line-through; font-weight: 500; }
+    .price-new { color: #111; font-weight: 800; }
+    .discount-badge { background: #16a34a; color: #fff; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 999px; font-weight: 700; }
     .product button {
       background-color: #111;
       color: white;
@@ -127,6 +146,11 @@
       gap: 0.75rem;
       transition: all 0.2s ease;
     }
+    .animate-flash { animation: flash-bg 800ms ease; }
+    @keyframes flash-bg {
+      0% { background: #fffbe6; box-shadow: 0 0 0 rgba(0,0,0,0); }
+      100% { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    }
     .cart-item:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 16px rgba(0,0,0,0.1);
@@ -156,6 +180,41 @@
       gap: 0.5rem;
       font-size: 0.85rem;
       color: #666;
+    }
+    .qty-btn {
+      background: #eee;
+      color: #111;
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .qty-btn:hover {
+      background: #ddd;
+    }
+    .animate-pop { animation: pop 300ms ease; }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .animate-press { animation: press 180ms ease; }
+    @keyframes press {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.96); }
+      100% { transform: scale(1); }
+    }
+    .animate-tilt { animation: tilt 450ms ease; }
+    @keyframes tilt {
+      0% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(-3deg) scale(1.02); }
+      50% { transform: rotate(3deg) scale(1.02); }
+      100% { transform: rotate(0deg) scale(1); }
     }
     .cart-item-quantity {
       background: #f8f9fa;
@@ -573,10 +632,10 @@
         <span>🛍️ OnlyBodys</span>
       </div>
     </div>
-    <button class="cart-button" onclick="toggleCart()">Ver Carrito</button>
+    <button class="cart-button" onclick="toggleCart()">Ver Carrito <span id="cart-count" class="cart-count">0</span></button>
   </header> 
     <ul>
-      <li><a href="#">Los bodys mas HOT </a></li>
+      <li><a href="#">Los bodys mas HOT los encontras todos acá </a></li>
     </ul>
   </nav>
   <div class="breadcrumb"> </div>
@@ -643,7 +702,7 @@
     
     // Opciones de envío disponibles por zona
     const opcionesEnvio = [
-      { id: 0, nombre: "Retiro en Sucursal", precio: 0, descripcion: "Gratis - Recoleta", zona: "Retiro" },
+      { id: 0, nombre: "Punto de entrega", precio: 0, descripcion: "Ballester Centro", zona: "Villa Ballester" },
       
       // CAPITAL FEDERAL
       { id: 1, nombre: "CABA", precio: 9500, descripcion: "Capital Federal", zona: "CABA" },
@@ -676,6 +735,12 @@
     
     let envioSeleccionado = opcionesEnvio[0]; // Por defecto el primer envío
     let numeroOrden = ""; // Se genera al abrir el carrito
+    // Descuento configurable (porcentaje)
+    let DESCUENTO_PORC = 5; // Cambia este valor para modificar el descuento global
+    function precioConDescuento(precio) {
+      return Math.round(precio * (1 - (DESCUENTO_PORC / 100)));
+    }
+
     const productos = [
       { id: 1, nombre: "Body VENUS HILO", precio: 18000, stock: true, imgs: [
         "https://acdn-us.mitiendanube.com/stores/001/091/019/products/formato-web-margarets-22-42555190f3a6ba14a417515726455329-480-0.webp",
@@ -890,14 +955,20 @@
         const stockBadge = p.stock ? '' : '<div class="stock-badge">Sin Stock</div>';
         const buttonClass = p.stock ? '' : 'sin-stock';
         const buttonText = p.stock ? 'Agregar' : 'Sin Stock';
-        const buttonAction = p.stock ? `onclick="agregarAlCarrito(${p.id})"` : '';
+        const buttonAction = p.stock ? `onclick="agregarAlCarrito(${p.id}, this)"` : '';
         
+        const precioOriginal = p.precio;
+        const precioDescuento = precioConDescuento(precioOriginal);
         cont.innerHTML += `
           <div class="product ${stockClass}">
             ${stockBadge}
             ${carouselHTML}
             <h3>${p.nombre}</h3>
-            <p>$${p.precio.toLocaleString()}</p>
+            <div class="price">
+              <span class="price-old">$${precioOriginal.toLocaleString()}</span>
+              <span class="price-new">$${precioDescuento.toLocaleString()}</span>
+              <span class="discount-badge">-${DESCUENTO_PORC}%</span>
+            </div>
             <button class="${buttonClass}" ${buttonAction}>${buttonText}</button>
           </div>
         `;
@@ -906,7 +977,7 @@
       productos.forEach(p => updateCarousel(p.id));
     }
 
-    function agregarAlCarrito(id) {
+    function agregarAlCarrito(id, el) {
       const producto = productos.find(p => p.id === id);
       
       // Validar que el producto tenga stock
@@ -923,12 +994,32 @@
       }
       guardarCarrito();
       renderCarrito();
+      actualizarContadorCarrito();
+      // Animación sutil en el contador y botón agregar
+      const badge = document.getElementById('cart-count');
+      if (badge) {
+        badge.classList.remove('animate-bump');
+        void badge.offsetWidth;
+        badge.classList.add('animate-bump');
+      }
+      if (el) {
+        el.classList.remove('animate-press');
+        void el.offsetWidth;
+        el.classList.add('animate-press');
+      }
     }
 
     function eliminarDelCarrito(id) {
       carrito = carrito.filter(p => p.id !== id);
       guardarCarrito();
       renderCarrito();
+      actualizarContadorCarrito();
+    }
+
+    function actualizarContadorCarrito() {
+      const count = carrito.reduce((acc, p) => acc + p.cantidad, 0);
+      const badge = document.getElementById('cart-count');
+      if (badge) badge.textContent = String(count);
     }
 
     function renderCarrito() {
@@ -946,18 +1037,21 @@
         `;
       } else {
         carrito.forEach(p => {
-          total += p.precio * p.cantidad;
+          const precioUnit = precioConDescuento(p.precio);
+          total += precioUnit * p.cantidad;
           const producto = productos.find(prod => prod.id === p.id);
           const imagenSrc = producto?.imgs?.[0] || producto?.img || 'https://via.placeholder.com/60x60?text=IMG';
           
           cont.innerHTML += `
-            <div class="cart-item">
-              <img src="${imagenSrc}" alt="${p.nombre}" class="cart-item-image" />
+            <div class="cart-item" data-id="${p.id}">
+              <img src="${imagenSrc}" alt="${p.nombre}" class="cart-item-image" onload="this.classList.add('animate-tilt')" />
               <div class="cart-item-info">
                 <div class="cart-item-name">${p.nombre}</div>
                 <div class="cart-item-details">
+                  <button class="qty-btn" onclick="cambiarCantidad(${p.id}, -1, this)" aria-label="Quitar">−</button>
                   <span class="cart-item-quantity">x${p.cantidad}</span>
-                  <span class="cart-item-price">$${(p.precio * p.cantidad).toLocaleString()}</span>
+                  <button class="qty-btn" onclick="cambiarCantidad(${p.id}, 1, this)" aria-label="Sumar">+</button>
+                  <span class="cart-item-price">$${(precioUnit * p.cantidad).toLocaleString()}</span>
                 </div>
               </div>
               <button class="cart-item-remove" onclick="eliminarDelCarrito(${p.id})" title="Eliminar producto">
@@ -982,6 +1076,32 @@
 
     function guardarCarrito() {
       localStorage.setItem("carrito", JSON.stringify(carrito));
+    }
+
+    function cambiarCantidad(id, delta, el) {
+      const item = carrito.find(p => p.id === id);
+      if (!item) return;
+      item.cantidad = Math.max(0, (item.cantidad || 0) + delta);
+      if (item.cantidad === 0) {
+        carrito = carrito.filter(p => p.id !== id);
+      }
+      guardarCarrito();
+      renderCarrito();
+      actualizarContadorCarrito();
+      // Animar el item afectado si existe en DOM
+      requestAnimationFrame(() => {
+        const row = document.querySelector(`.cart-item[data-id="${id}"]`);
+        if (row) {
+          row.classList.remove('animate-flash');
+          void row.offsetWidth;
+          row.classList.add('animate-flash');
+        }
+        if (el) {
+          el.classList.remove('animate-pop');
+          void el.offsetWidth;
+          el.classList.add('animate-pop');
+        }
+      });
     }
 
     function checkout() {
@@ -1018,7 +1138,8 @@
       mensaje += `%0A🛒 *PRODUCTOS:*%0A`;
       
       carrito.forEach(p => {
-        mensaje += `• ${p.nombre} x${p.cantidad} - $${(p.precio * p.cantidad).toLocaleString()}%0A`;
+        const unit = precioConDescuento(p.precio);
+        mensaje += `• ${p.nombre} x${p.cantidad} - $${(unit * p.cantidad).toLocaleString()}%0A`;
       });
       
       const costoEnvio = envioSeleccionado.precio;
@@ -1026,7 +1147,7 @@
       mensaje += `%0A🚚 *ENVÍO:*%0A`;
       mensaje += `${envioSeleccionado.nombre}: ${envioTexto}%0A`;
       
-      const subtotal = carrito.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
+      const subtotal = carrito.reduce((acc, p) => acc + precioConDescuento(p.precio) * p.cantidad, 0);
       const total = subtotal + costoEnvio;
       mensaje += `%0A💰 *TOTAL A PAGAR: $${total.toLocaleString()}*%0A`;
       mensaje += `%0A📦 Número de orden: *${numeroOrden}*`;
@@ -1083,6 +1204,7 @@
 
     renderProductos();
     renderCarrito();
+    actualizarContadorCarrito();
     protegerImagenes();
   </script>
   <section class="info-cards">
